@@ -8,7 +8,7 @@ import {
   MenuItem,
   Select,
 } from "@material-ui/core";
-import SearchResults from "./SearchResults";
+import SearchResults from "../Components/SearchResults";
 import SearchIcon from "@material-ui/icons/Search";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";

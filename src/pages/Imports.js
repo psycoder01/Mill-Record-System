@@ -2,9 +2,9 @@ import React, { useState} from "react";
 import { CssBaseline } from "@material-ui/core";
 
 // import Inputs from "./Inputs";
-import Inputs from "./Inputs";
+import Inputs from "../Components/Inputs";
 import { connect } from "react-redux";
-import { addExports} from "../store/actions/exports.action";
+import { addImports} from "../store/actions/imports.action";
 import {updateProduct} from '../store/actions/products.action';
 
 const classes = {
@@ -14,7 +14,7 @@ const classes = {
   }
 };
 
-const Imports = ({ products, addExports,updateProduct }) => {
+const Imports = ({ products, addImports,updateProduct }) => {
 
   //states --------------------------------------//
   const [details, setDetails] = useState({
@@ -36,13 +36,13 @@ const Imports = ({ products, addExports,updateProduct }) => {
       Rate: details.rate,
       mode: details.mode,
       Total: details.total,
-      Customer: details.userName,
-      Customer_Phone_No: details.userPno
+      Merchant: details.userName,
+      Merchant_Phone_No: details.userPno
     };
 
-    addExports(newData);
+    addImports(newData);
     let updateAvailable =
-      Number(currentObj.Available) -
+      Number(currentObj.Available) +
       Number(details.quantity) * Number(details.mode);
 
     const update = {
@@ -97,7 +97,7 @@ const Imports = ({ products, addExports,updateProduct }) => {
       <div style={classes.root}>
         <h1 align="center">Imports Page</h1>
         <Inputs
-          mode={1}
+          mode={0}
           products={products}
           details={details}
           currentObj={currentObj}
@@ -115,11 +115,11 @@ const Imports = ({ products, addExports,updateProduct }) => {
 const stateAsProps = (reducers) => {
   return {
     products: reducers.productsReducer.products,
-    exports: reducers.exportsReducer.imports
+    imports: reducers.importsReducer.imports
   };
 };
 const actionAsProps = {
-  addExports: addExports,
+  addImports: addImports,
   updateProduct:updateProduct
 };
 

@@ -3,13 +3,13 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 //Components Import
 import Products_info from "./Components/Products.info";
-import Home from "./Components/Home";
-import Search from "./Components/Search";
-import Exports from "./Components/Exports";
+import Home from "./pages/Home";
+import Search from "./pages/Search";
+import Exports from "./pages/Exports";
 import Appbar from "./Components/Appbar";
-import Imports from "./Components/Imports";
+import Imports from "./pages/Imports";
 import PrintExport from "./Components/PrintExport";
-import Login from "./Components/Login";
+import Login from "./pages/Login";
 
 function App() {
   const [isLogin, setLogin] = useState(false);

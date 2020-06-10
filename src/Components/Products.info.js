@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Container } from "@material-ui/core";
-import Products from "./Products";
+import Products from "../pages/Products";
 import ProductTable from "./ProductTable";
 
 import {
