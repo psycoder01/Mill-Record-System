@@ -30,9 +30,13 @@ const Products_info = ({
     Available50Bag: 0,
   });
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  useEffect(
+    () => {
+      fetchProducts();
+    },
+    // eslint-disable-next-line
+    []
+  );
 
   function onDelete(id) {
     delProduct(id);

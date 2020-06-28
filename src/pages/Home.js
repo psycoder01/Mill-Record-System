@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CssBaseline, Button } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from "@material-ui/core/styles";
@@ -9,6 +9,7 @@ import {
   TableCell,
   TableRow,
 } from "@material-ui/core";
+import Skeleton from "@material-ui/lab/Skeleton";
 import { connect } from "react-redux";
 import { fetchProducts } from "../store/actions/products.action";
 import { fetchImports } from "../store/actions/imports.action";
@@ -31,19 +32,100 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const StatusList = (props) => {
-  return props.data.map((rate) => {
-    return (
+  return props.loading ? (
+    <React.Fragment>
+      <TableRow>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
+  ) : (
+    props.data.map((rate) => (
       <TableRow key={rate._id}>
         <TableCell>{rate.ProductName}</TableCell>
         <TableCell>{rate.Available}</TableCell>
       </TableRow>
-    );
-  });
+    ))
+  );
 };
 
 const RateList = (props) => {
-  return props.data.map((rate) => {
-    return (
+  return props.loading ? (
+    <React.Fragment>
+      <TableRow>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+        <TableCell>
+          <Skeleton />
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
+  ) : (
+    props.data.map((rate) => (
       <TableRow key={rate._id}>
         <TableCell>{rate.ProductName}</TableCell>
         <TableCell>{rate.PricePerKg}</TableCell>
@@ -51,14 +133,15 @@ const RateList = (props) => {
         <TableCell>{rate.PricePer30Bag}</TableCell>
         <TableCell>{rate.PricePer50Bag}</TableCell>
       </TableRow>
-    );
-  });
+    ))
+  );
 };
 const handleSubmit = (e) => {
   localStorage.removeItem("token");
   window.location.assign("https://mgmtsys.netlify.com/");
 };
 const Page = (props) => {
+  if (props.data.length) props.setLoading(false);
   const classes = useStyles();
   return (
     <CssBaseline>
@@ -73,7 +156,7 @@ const Page = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              <StatusList data={props.data} />
+              <StatusList data={props.data} loading={props.loading} />
             </TableBody>
           </Table>
         </Card>
@@ -90,7 +173,7 @@ const Page = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              <RateList data={props.data} />
+              <RateList data={props.data} loading={props.loading} />
             </TableBody>
           </Table>
         </Card>
@@ -117,17 +200,29 @@ const Page = (props) => {
 
 const Home = ({ getProducts, products, fetchImports, fetchExports }) => {
   //Componet Did mount ------------------------//
-  useEffect(() => {
-    getProducts().catch((err) => alert("Cannot Connect to Server"));
-  }, []);
-  useEffect(() => {
-    fetchImports();
-  }, []);
-  useEffect(() => {
-    fetchExports();
-  }, []);
+  useEffect(
+    () => {
+      getProducts().catch((err) => alert("Cannot Connect to Server"));
+      console.log("useEffect");
+    }, // eslint-disable-next-line
+    []
+  );
+  useEffect(
+    () => {
+      fetchImports();
+    }, // eslint-disable-next-line
+    []
+  );
+  useEffect(
+    () => {
+      fetchExports();
+    }, // eslint-disable-next-line
+    []
+  );
 
-  return <Page data={products} />;
+  const [loading, setLoading] = useState(true);
+
+  return <Page data={products} loading={loading} setLoading={setLoading} />;
 };
 
 const stateAsProps = (reducers) => {
@@ -138,6 +233,6 @@ const stateAsProps = (reducers) => {
 const actionAsProps = {
   getProducts: fetchProducts,
   fetchImports: fetchImports,
-  fetchExports:fetchExports
+  fetchExports: fetchExports,
 };
 export default connect(stateAsProps, actionAsProps)(Home);

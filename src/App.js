@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 //Components Import
@@ -14,14 +14,6 @@ import Login from "./pages/Login";
 function App() {
   const [isLogin, setLogin] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    let loggedIn = true;
-    if (token == null) {
-      loggedIn = false;
-    }
-    setLogin(loggedIn);
-  }, []);
   return isLogin ? (
     <Router>
       <div className="App">
