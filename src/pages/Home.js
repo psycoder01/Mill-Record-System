@@ -62,7 +62,7 @@ const RateList = (props) => {
 };
 const handleSubmit = (e) => {
   localStorage.removeItem("token");
-  window.location.assign("https://mgmtsys.netlify.com/");
+  window.location.assign("/");
 };
 const Page = (props) => {
   const classes = useStyles();
