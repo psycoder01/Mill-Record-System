@@ -7,6 +7,7 @@ import {
   Typography,
   Button,
 } from "@material-ui/core";
+import ErrorSnackBar from "../Components/SnackBar";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 const styles = makeStyles({
@@ -36,11 +37,25 @@ const Login = (props) => {
   const classes = styles();
   const [check, setCheck] = useState("");
 
+  //SnackBar operations
+  const [messege, setMessege] = React.useState("");
+  const [openSnack, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
   const handleChange = (event) => {
     setCheck(event.target.value);
   };
   const misMatch = () => {
-    alert("Wrong Password!!");
+    handleOpen();
     setCheck("");
   };
   const handleSubmit = (event) => {
@@ -51,10 +66,15 @@ const Login = (props) => {
         if (check === res.data[0].password) {
           localStorage.setItem("token", "anyrandomstring");
           props.setLogin(true);
-          setLoading(false);
         } else misMatch();
+
+        setLoading(false);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        setMessege("Server Error!");
+        handleOpen();
+        setLoading(false);
+      });
   };
   if (props.isLogin) {
     return <Redirect to="/" />;
@@ -93,6 +113,11 @@ const Login = (props) => {
           </div>
         </div>
       </Paper>
+      <ErrorSnackBar
+        open={openSnack}
+        handleClose={handleClose}
+        messege={messege || "Password Incorrect!!"}
+      />
     </React.Fragment>
   );
 };

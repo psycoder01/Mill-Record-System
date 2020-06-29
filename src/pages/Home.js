@@ -9,7 +9,8 @@ import {
   TableCell,
   TableRow,
 } from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
+
+import { StatusListSkeleton, RateListSkeleton } from "../Components/Skeleton";
 import { connect } from "react-redux";
 import { fetchProducts } from "../store/actions/products.action";
 import { fetchImports } from "../store/actions/imports.action";
@@ -33,32 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 const StatusList = (props) => {
   return props.loading ? (
-    <React.Fragment>
-      <TableRow>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
+    <StatusListSkeleton />
   ) : (
     props.data.map((rate) => (
       <TableRow key={rate._id}>
@@ -71,59 +47,7 @@ const StatusList = (props) => {
 
 const RateList = (props) => {
   return props.loading ? (
-    <React.Fragment>
-      <TableRow>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-        <TableCell>
-          <Skeleton />
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
+    <RateListSkeleton />
   ) : (
     props.data.map((rate) => (
       <TableRow key={rate._id}>
@@ -141,7 +65,6 @@ const handleSubmit = (e) => {
   window.location.assign("https://mgmtsys.netlify.com/");
 };
 const Page = (props) => {
-  if (props.data.length) props.setLoading(false);
   const classes = useStyles();
   return (
     <CssBaseline>
@@ -202,8 +125,9 @@ const Home = ({ getProducts, products, fetchImports, fetchExports }) => {
   //Componet Did mount ------------------------//
   useEffect(
     () => {
-      getProducts().catch((err) => alert("Cannot Connect to Server"));
-      console.log("useEffect");
+      getProducts()
+        .then(() => setLoading(false))
+        .catch((err) => alert("Cannot Connect to Server"));
     }, // eslint-disable-next-line
     []
   );
@@ -222,7 +146,7 @@ const Home = ({ getProducts, products, fetchImports, fetchExports }) => {
 
   const [loading, setLoading] = useState(true);
 
-  return <Page data={products} loading={loading} setLoading={setLoading} />;
+  return <Page data={products} loading={loading} />;
 };
 
 const stateAsProps = (reducers) => {
