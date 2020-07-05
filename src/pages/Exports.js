@@ -1,21 +1,13 @@
-import React, { useState} from "react";
-import { CssBaseline } from "@material-ui/core";
+import React, { useState } from "react";
+import { Paper } from "@material-ui/core";
 
 // import Inputs from "./Inputs";
 import Inputs from "../Components/Inputs";
 import { connect } from "react-redux";
-import { addExports} from "../store/actions/exports.action";
-import {updateProduct} from '../store/actions/products.action';
+import { addExports } from "../store/actions/exports.action";
+import { updateProduct } from "../store/actions/products.action";
 
-const classes = {
-  root: {
-    marginTop: 80,
-    marginLeft: 60
-  }
-};
-
-const Imports = ({ products, addExports,updateProduct }) => {
-
+const Imports = ({ products, addExports, updateProduct }) => {
   //states --------------------------------------//
   const [details, setDetails] = useState({
     productName: "",
@@ -24,7 +16,7 @@ const Imports = ({ products, addExports,updateProduct }) => {
     quantity: "",
     total: 0,
     userName: "",
-    userPno: ""
+    userPno: "",
   });
   const [currentObj, setCurrentObj] = useState([]);
   //handling Data events ------------------------------------------//
@@ -37,7 +29,7 @@ const Imports = ({ products, addExports,updateProduct }) => {
       mode: details.mode,
       Total: details.total,
       Customer: details.userName,
-      Customer_Phone_No: details.userPno
+      Customer_Phone_No: details.userPno,
     };
 
     addExports(newData);
@@ -51,9 +43,9 @@ const Imports = ({ products, addExports,updateProduct }) => {
       PricePer25Bag: currentObj.PricePer25Bag,
       PricePer30Bag: currentObj.PricePer30Bag,
       PricePer50Bag: currentObj.PricePer50Bag,
-      Available: updateAvailable
+      Available: updateAvailable,
     };
-    updateProduct(currentObj._id,update);
+    updateProduct(currentObj._id, update);
   }
   //handle Reset ------------------------------------------//
   function handleReset() {
@@ -64,7 +56,7 @@ const Imports = ({ products, addExports,updateProduct }) => {
       quantity: "",
       total: 0,
       userName: "",
-      userPno: ""
+      userPno: "",
     });
     setCurrentObj([]);
   }
@@ -93,34 +85,35 @@ const Imports = ({ products, addExports,updateProduct }) => {
     setDetails({ ...details, [input]: event.target.value });
   };
   return (
-    <CssBaseline>
-      <div style={classes.root}>
-        <h1 align="center">Imports Page</h1>
-        <Inputs
-          mode={1}
-          products={products}
-          details={details}
-          currentObj={currentObj}
-          handleSubmit={handleSubmit}
-          handleReset={handleReset}
-          handleProductChange={handleProductChange}
-          handleModeChange={handleModeChange}
-          handleQChange={handleQChange}
-          handleChange={handleChange}
-        />
-      </div>
-    </CssBaseline>
+    <Paper
+      style={{ padding: "1em 2em 2em 2em", margin: "8em 2em 2em 2em" }}
+      elevation={3}
+    >
+      <h1 align="center">Exports Page</h1>
+      <Inputs
+        mode={1}
+        products={products}
+        details={details}
+        currentObj={currentObj}
+        handleSubmit={handleSubmit}
+        handleReset={handleReset}
+        handleProductChange={handleProductChange}
+        handleModeChange={handleModeChange}
+        handleQChange={handleQChange}
+        handleChange={handleChange}
+      />
+    </Paper>
   );
 };
 const stateAsProps = (reducers) => {
   return {
     products: reducers.productsReducer.products,
-    exports: reducers.exportsReducer.imports
+    exports: reducers.exportsReducer.imports,
   };
 };
 const actionAsProps = {
   addExports: addExports,
-  updateProduct:updateProduct
+  updateProduct: updateProduct,
 };
 
 export default connect(stateAsProps, actionAsProps)(Imports);

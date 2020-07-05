@@ -16,8 +16,6 @@ export function addImports(data) {
   return async (dispatch) => {
     await axios
       .post(`${url}/add`, data)
-      .then(() => alert("Data is added!"))
-      .catch((err) => alert(err));
     let action = { type: ADDIMPORTS, payload: data };
     dispatch(action);
   };

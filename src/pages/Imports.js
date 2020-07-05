@@ -1,21 +1,14 @@
-import React, { useState} from "react";
-import { CssBaseline } from "@material-ui/core";
+import React, { useState } from "react";
+import { Paper } from "@material-ui/core";
+import ErrorSnackBar from "../Components/SnackBar";
 
 // import Inputs from "./Inputs";
 import Inputs from "../Components/Inputs";
 import { connect } from "react-redux";
-import { addImports} from "../store/actions/imports.action";
-import {updateProduct} from '../store/actions/products.action';
+import { addImports } from "../store/actions/imports.action";
+import { updateProduct } from "../store/actions/products.action";
 
-const classes = {
-  root: {
-    marginTop: 80,
-    marginLeft: 60
-  }
-};
-
-const Imports = ({ products, addImports,updateProduct }) => {
-
+const Imports = ({ products, addImports, updateProduct }) => {
   //states --------------------------------------//
   const [details, setDetails] = useState({
     productName: "",
@@ -24,11 +17,34 @@ const Imports = ({ products, addImports,updateProduct }) => {
     quantity: "",
     total: 0,
     userName: "",
-    userPno: ""
+    userPno: "",
   });
   const [currentObj, setCurrentObj] = useState([]);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackMsg, setSnackMsg] = useState("");
   //handling Data events ------------------------------------------//
+  function checkInputs() {
+    if (
+      !(
+        details.productName &&
+        details.quantity &&
+        details.mode &&
+        details.userName &&
+        details.userPno
+      )
+    )
+    setSnackOpen(true);
+    setSnackMsg("Empyt Fields")
+    return 0;
+  }
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackOpen(false);
+  };
   function handleSubmit(e) {
+    checkInputs();
     e.preventDefault();
     const newData = {
       ProductName: details.productName,
@@ -37,10 +53,18 @@ const Imports = ({ products, addImports,updateProduct }) => {
       mode: details.mode,
       Total: details.total,
       Merchant: details.userName,
-      Merchant_Phone_No: details.userPno
+      Merchant_Phone_No: details.userPno,
     };
 
-    addImports(newData);
+    addImports(newData)
+      .then(() => {
+        setSnackOpen(true);
+        setSnackMsg("Product Added Successfully!");
+      })
+      .catch(() => {
+        setSnackOpen(true);
+        setSnackMsg("Server Error!");
+      });
     let updateAvailable =
       Number(currentObj.Available) +
       Number(details.quantity) * Number(details.mode);
@@ -51,9 +75,9 @@ const Imports = ({ products, addImports,updateProduct }) => {
       PricePer25Bag: currentObj.PricePer25Bag,
       PricePer30Bag: currentObj.PricePer30Bag,
       PricePer50Bag: currentObj.PricePer50Bag,
-      Available: updateAvailable
+      Available: updateAvailable,
     };
-    updateProduct(currentObj._id,update);
+    updateProduct(currentObj._id, update);
   }
   //handle Reset ------------------------------------------//
   function handleReset() {
@@ -64,7 +88,7 @@ const Imports = ({ products, addImports,updateProduct }) => {
       quantity: "",
       total: 0,
       userName: "",
-      userPno: ""
+      userPno: "",
     });
     setCurrentObj([]);
   }
@@ -93,8 +117,11 @@ const Imports = ({ products, addImports,updateProduct }) => {
     setDetails({ ...details, [input]: event.target.value });
   };
   return (
-    <CssBaseline>
-      <div style={classes.root}>
+    <>
+      <Paper
+        style={{ padding: "1em 2em 2em 2em", margin: "8em 2em 2em 2em" }}
+        elevation={3}
+      >
         <h1 align="center">Imports Page</h1>
         <Inputs
           mode={0}
@@ -108,19 +135,24 @@ const Imports = ({ products, addImports,updateProduct }) => {
           handleQChange={handleQChange}
           handleChange={handleChange}
         />
-      </div>
-    </CssBaseline>
+      </Paper>
+      <ErrorSnackBar
+        open={snackOpen}
+        handleClose={handleClose}
+        messege={snackMsg}
+      />
+    </>
   );
 };
 const stateAsProps = (reducers) => {
   return {
     products: reducers.productsReducer.products,
-    imports: reducers.importsReducer.imports
+    imports: reducers.importsReducer.imports,
   };
 };
 const actionAsProps = {
   addImports: addImports,
-  updateProduct:updateProduct
+  updateProduct: updateProduct,
 };
 
 export default connect(stateAsProps, actionAsProps)(Imports);
