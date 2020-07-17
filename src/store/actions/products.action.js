@@ -1,9 +1,10 @@
 import { FETCHPRODUCTS, UPDATEPRODUCT, DELPRODUCT, ADDPRODUCT } from "./types.action";
 import axios from "axios";
+import {api} from '../../api';
 
 export function fetchProducts() {
   return async (dispatch) => {
-    let res = await fetch("https://mgmtsys.herokuapp.com/products");
+    let res = await fetch(`${api}/products`);
     let data = await res.json();
     let action = { type: FETCHPRODUCTS, payload: data };
     dispatch(action);
@@ -12,7 +13,7 @@ export function fetchProducts() {
 export function updateProduct(id, update) {
   return async (dispatch) => {
     await axios.put(
-      "https://mgmtsys.herokuapp.com/products/update/" + id,
+      `${api}/products/update/` + id,
       update
     );
     let action = { type: UPDATEPRODUCT, payload: update };
@@ -23,7 +24,7 @@ export function updateProduct(id, update) {
 export function addProduct(data){
   return async (dispatch)=>{
     await axios
-      .post("https://mgmtsys.herokuapp.com/products/add", data)
+      .post(`${api}/products/add`, data)
       .then(() => alert('added Product'))
       .catch(err => alert("Error::" + err));
 
@@ -35,7 +36,7 @@ export function addProduct(data){
 export function delProduct(id) {
   return async (dispatch) => {
     await axios
-      .delete("https://mgmtsys.herokuapp.com/products/delete/" + id)
+      .delete(`${api}/products/delete/` + id)
       .then(() => alert("Item Deleted"))
       .catch((err) => alert(err));
 
