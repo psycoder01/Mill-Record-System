@@ -5,12 +5,12 @@ import {
     Paper,
     makeStyles,
     Typography,
-    Button,
+    Button
 } from "@material-ui/core";
 import ErrorSnackBar from "../Components/SnackBar";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
-import {api} from '../api';
+import { api } from "../api";
 const styles = makeStyles({
     paper: {
         display: "flex",
@@ -21,18 +21,18 @@ const styles = makeStyles({
         width: "100%",
         margin: "0",
         padding: "0",
-        backgroundColor: "#f7f7f7",
+        backgroundColor: "#f7f7f7"
     },
     input: {
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "column"
     },
     button: {
-        marginTop: "2rem",
-    },
+        marginTop: "2rem"
+    }
 });
 
-const Login = (props) => {
+const Login = props => {
     const [btnLoader, setLoader] = useState(false);
 
     const classes = styles();
@@ -45,33 +45,32 @@ const Login = (props) => {
         setOpen(true);
     };
 
-    const handleClose = (event, reason) => {
+    const handleClose = (reason) => {
         if (reason === "clickaway") {
             return;
         }
         setOpen(false);
     };
 
-    const handleChange = (event) => {
+    const handleChange = event => {
         setCheck(event.target.value);
     };
     const misMatch = () => {
         handleOpen();
         setCheck("");
+        setLoader(false);
     };
-    const handleSubmit = (event) => {
+    const handleSubmit = () => {
         setLoader(true);
         axios
             .get(`${api}/login/`)
-            .then((res) => {
+            .then(res => {
                 if (check === res.data[0].password) {
                     localStorage.setItem("token", "anyrandomstring");
                     props.setLogin(true);
                 } else misMatch();
-
-                setLoader(false);
             })
-            .catch((err) => {
+            .catch(() => {
                 setMessege("Server Error!");
                 handleOpen();
                 setLoader(false);
@@ -80,9 +79,6 @@ const Login = (props) => {
     if (props.isLogin) {
         return <Redirect to="/" />;
     }
-
-    //Checking if the user is logged in or not
-    props.setLogin(localStorage.getItem("token") ? true : false);
 
     return (
         <React.Fragment>
@@ -109,7 +105,11 @@ const Login = (props) => {
                             color="primary"
                             onClick={handleSubmit}
                         >
-                            {btnLoader ? <CircularProgress color="secondary" /> : "LOGIN"}
+                            {btnLoader ? (
+                                <CircularProgress color="secondary" />
+                            ) : (
+                                "LOGIN"
+                            )}
                         </Button>
                     </div>
                 </div>
