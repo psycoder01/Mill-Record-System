@@ -17,8 +17,7 @@ export function fetchExports() {
 export function addExports(data) {
     return async dispatch => {
         await axios
-            .post(`${api}/add`, data)
-            .then(() => alert("Data is added!"))
+            .post(`${api}/exports/add`, data)
             .catch(err => alert(err));
         let action = { type: ADDEXPORTS, payload: data };
         dispatch(action);
@@ -28,8 +27,7 @@ export function addExports(data) {
 export function delExports(id) {
     return async dispatch => {
         await axios
-            .delete(`${api}/delete/` + id)
-            .then(() => alert("Item Deleted"))
+            .delete(`${api}/exports/delete/` + id)
             .catch(err => alert(err));
         let action = { type: DELEXPORTS, payload: id };
         dispatch(action);
